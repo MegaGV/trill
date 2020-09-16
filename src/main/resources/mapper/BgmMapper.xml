@@ -12,7 +12,7 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="team.TAF.trill.pojo.Bgm" >
-    insert into bgm (id, author, name, 
+    insert into bgm (id, author, name,
       path)
     values (#{id,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{path,jdbcType=VARCHAR})
