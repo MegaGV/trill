@@ -17,4 +17,6 @@ public interface VideoMapper {
     int updateByPrimaryKey(Video record);
 
     List<Video> getByDesc(@Param("desc") String desc);
+
+    List<Video> getByIdDesc(@Param("id") String id, @Param("desc")  String desc);
 }

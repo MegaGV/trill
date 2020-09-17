@@ -35,9 +35,10 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+    <!-- 视图解析器 -->
     <bean id="templateResolver"
           class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
-        <property name="prefix" value="/WEB-INF/templates/"/>
+        <property name="prefix" value="/"/>
         <property name="suffix" value=".html"/>
         <property name="characterEncoding" value="UTF-8"/>
         <property name="order" value="1"/>
@@ -57,7 +58,7 @@
 
 
     <!--所有静态资源需要重新映射 -->
-    <!--<mvc:resources location="/WEB-INF/js/" mapping="/js/**">
+    <mvc:resources location="/WEB-INF/js/" mapping="/js/**">
     </mvc:resources>
     <mvc:resources location="/WEB-INF/css/" mapping="/css/**">
     </mvc:resources>
@@ -65,12 +66,12 @@
     </mvc:resources>
     <mvc:resources location="/WEB-INF/templates/" mapping="/templates/**">
     </mvc:resources>
-    <mvc:resources location="/WEB-INF/layui/" mapping="/layui/**">
+    <mvc:resources location="/layui/" mapping="/layui/**">
     </mvc:resources>
     <mvc:resources location="/WEB-INF/video/" mapping="/video/**">
     </mvc:resources>
     <mvc:resources location="/WEB-INF/bgm/" mapping="/bgm/**">
-    </mvc:resources>-->
+    </mvc:resources>
 
     <!-- 文件上传-->
     <bean name="multipartResolver"

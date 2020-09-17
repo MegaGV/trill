@@ -62,7 +62,20 @@
     video_height, cover_path, like_counts, status, create_time
     from videos
     <if test="desc != null" >
-     where video_desc LIKE  CONCAT('%',#{desc},'%')
+     where video_desc like  CONCAT('%',#{desc},'%')
     </if>
+  </select>
+  <select id="getByIdDesc" resultMap="BaseResultMap">
+    select id, user_id, audio_id, video_desc, video_path, video_seconds, video_width,
+    video_height, cover_path, like_counts, status, create_time
+    from videos
+    <where>
+      <if test="id != null">
+        id like CONCAT('%', #{id}, '%')
+      </if>
+      <if test="desc != null">
+        or video_desc like CONCAT('%', #{desc}, '%')
+      </if>
+    </where>
   </select>
 </mapper>

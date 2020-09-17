@@ -9,4 +9,8 @@ public interface VideoService {
     List<Video> getAll(Integer page, Integer limit);
 
     List<Video> getByDesc(String desc);
+
+    List<Video> getByIdDesc(String id, String desc);
+
+    void deleteById(String id);
 }

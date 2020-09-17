@@ -2,6 +2,8 @@ package team.TAF.trill.service.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import team.TAF.trill.dao.VideoMapper;
 import team.TAF.trill.pojo.Video;
 import team.TAF.trill.service.VideoService;
@@ -27,4 +29,27 @@ public class VideoServiceImpl implements VideoService {
     public List<Video> getByDesc(String desc) {
         return videoMapper.getByDesc(desc);
     }
+
+    @Override
+    public List<Video> getByIdDesc(String id, String desc) {
+        return videoMapper.getByIdDesc(id, desc);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(String id) {
+        try{
+            videoMapper.deleteByPrimaryKey(id);
+        } catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+    }
+
+//    @Override
+//    @Transactional
+//    public void deleteById(String id) {
+//        videoMapper.deleteByPrimaryKey(id);
+//    }
+
 }
