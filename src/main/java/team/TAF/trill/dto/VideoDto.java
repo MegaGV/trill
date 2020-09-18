@@ -1,10 +1,20 @@
 package team.TAF.trill.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 public class VideoDto {
     private String id;
     private String nickname;
-    private String video_path;
-    private String video_desc;
+    private String videoPath;
+    private String videoDesc;
+    private Long likeCounts;
+    private Integer status;
+    @DateTimeFormat
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date createTime;
 
     public String getId() {
         return id;
@@ -22,19 +32,43 @@ public class VideoDto {
         this.nickname = nickname;
     }
 
-    public String getVideo_path() {
-        return video_path;
+    public String getVideoPath() {
+        return videoPath;
     }
 
-    public void setVideo_path(String video_path) {
-        this.video_path = video_path;
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
     }
 
-    public String getVideo_desc() {
-        return video_desc;
+    public String getVideoDesc() {
+        return videoDesc;
     }
 
-    public void setVideo_desc(String video_desc) {
-        this.video_desc = video_desc;
+    public void setVideoDesc(String videoDesc) {
+        this.videoDesc = videoDesc;
+    }
+
+    public Long getLikeCounts() {
+        return likeCounts;
+    }
+
+    public void setLikeCounts(Long likeCounts) {
+        this.likeCounts = likeCounts;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

@@ -3,33 +3,33 @@ package team.TAF.trill.dto;
 import java.util.List;
 
 public class Result {
-    private Integer code = 0;
-    private String msg = "";
-    private Integer count = 0;
+    private Integer status = 0;
+    private String message = "";
+    private Integer total = 0;
     private List data;
 
-    public Integer getCode() {
-        return code;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public Integer getCount() {
-        return count;
+    public Integer getTotal() {
+        return total;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setTotal(Integer total) {
+        this.total = total;
     }
 
     public List getData() {

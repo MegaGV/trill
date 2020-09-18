@@ -19,10 +19,7 @@ public class VideoController {
     @RequestMapping("/getResult")
     @ResponseBody
     public Result getResult(Integer page, Integer limit){
-        List<Video> raw = getAll(page, limit);
-        Result result = new Result();
-        result.setData(raw);
-        return result;
+        return videoService.getResult(page, limit);
     }
 
     @RequestMapping("/getAll")
@@ -61,5 +58,11 @@ public class VideoController {
 //        }
 //
 //    }
+
+    @RequestMapping("updateStatus")
+    @ResponseBody
+    public Result updateStatus(String vid, Integer status){
+        return videoService.updateStatus(vid, status);
+    }
 
 }
