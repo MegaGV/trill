@@ -97,9 +97,21 @@
      where videos.user_id=users.id
      limit #{page}, #{limit}
   </select>
-  <update id="updateStatus">
+  <update id="update">
     update videos
-    set status = #{status,jdbcType=INTEGER}
-    where id = #{id,jdbcType=VARCHAR}
+    set
+      <if test="field == 'likeCounts'">
+      like_counts=#{value}
+      </if>
+      <if test="field == 'videoDesc'">
+      video_desc=#{value}
+      </if>
+      <if test="field == 'videoPath'">
+      video_path=#{value}
+      </if>
+      <if test="field == 'status'">
+        status=#{value}
+      </if>
+    where id = #{id}
   </update>
 </mapper>

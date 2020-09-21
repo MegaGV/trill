@@ -8,6 +8,7 @@ import team.TAF.trill.dao.VideoMapper;
 import team.TAF.trill.dto.Result;
 import team.TAF.trill.pojo.Video;
 import team.TAF.trill.service.VideoService;
+import java.util.regex.Pattern;
 
 import java.util.List;
 
@@ -38,13 +39,26 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     @Transactional
-    public void deleteById(String id) {
-        try{
-            videoMapper.deleteByPrimaryKey(id);
-        } catch (Exception e){
-            e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+    public Result deleteById(String id) {
+        Result result = new Result();
+        Video video = videoMapper.selectByPrimaryKey(id);
+        if (video == null){
+            result.setStatus(500);
+            result.setMessage("请刷新界面后再试");
         }
+        else{
+            try{
+                videoMapper.deleteByPrimaryKey(id);
+                result.setStatus(100);
+                result.setMessage("删除成功");
+            } catch (Exception e){
+                e.printStackTrace();
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                result.setStatus(501);
+                result.setMessage("系统繁忙，请稍后再试");
+            }
+        }
+        return result;
     }
 
 //    @Override
@@ -74,16 +88,25 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     @Transactional
-    public Result updateStatus(String vid, Integer status) {
+    public Result update(String vid, String field, String value) {
         Video video = videoMapper.selectByPrimaryKey(vid);
         Result result = new Result();
+
+        if (field.equals("likeCounts")){
+            if (!Pattern.matches("^\\+?[0-9]\\d*$", value)){
+                result.setStatus(400);
+                result.setMessage("点赞数只能是数字");
+                return result;
+            }
+        }
+
         if (video == null){
             result.setStatus(500);
             result.setMessage("请刷新界面后再试");
         }
         else{
             try {
-                videoMapper.updateStatus(vid, status);
+                videoMapper.update(vid, field, value);
                 result.setStatus(100);
                 result.setMessage("更新成功");
             } catch (Exception e){
@@ -95,6 +118,10 @@ public class VideoServiceImpl implements VideoService {
         return result;
     }
 
+    @Override
+    public Video getVideoById(String id) {
+        return videoMapper.selectByPrimaryKey(id);
+    }
 
 
 }

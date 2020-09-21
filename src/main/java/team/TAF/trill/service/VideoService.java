@@ -13,11 +13,13 @@ public interface VideoService {
 
     List<Video> getByIdDesc(String id, String desc);
 
-    void deleteById(String id);
+    Result deleteById(String id);
 
     Result getResult(Integer page, Integer limit);
 
     int count();
 
-    Result updateStatus(String vid, Integer status);
+    Result update(String vid, String field, String value);
+
+    Video getVideoById(String id);
 }

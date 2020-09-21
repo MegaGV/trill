@@ -44,8 +44,8 @@ public class VideoController {
 
     @RequestMapping("deleteById")
     @ResponseBody
-    public void deleteById(String id){
-        videoService.deleteById(id);
+    public Result deleteById(String vid){
+        return videoService.deleteById(vid);
     }
 
 //    @RequestMapping("deleteById")
@@ -59,10 +59,16 @@ public class VideoController {
 //
 //    }
 
-    @RequestMapping("updateStatus")
+    @RequestMapping("update")
     @ResponseBody
-    public Result updateStatus(String vid, Integer status){
-        return videoService.updateStatus(vid, status);
+    public Result update(String vid, String field, String value){
+        return videoService.update(vid, field, value);
+    }
+
+    @RequestMapping("getVideoById")
+    @ResponseBody
+    public Video getVideoById(String id){
+        return videoService.getVideoById(id);
     }
 
 }

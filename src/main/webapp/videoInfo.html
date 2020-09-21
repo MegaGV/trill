@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+</head>
+<body>
+
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">id</label>
+        <div class="layui-input-block">
+            <input type="text" name="id" id="id" lay-verify="title" disabled autocomplete="off" placeholder="" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">视频描述</label>
+        <div class="layui-input-block">
+            <input type="text" name="videoDesc" id="videoDesc" lay-verify="title" disabled autocomplete="off" placeholder="" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">视频地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="videoPath" id="videoPath" lay-verify="title" disabled autocomplete="off" placeholder="" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">点赞数</label>
+        <div class="layui-input-block">
+            <input type="text" name="likeCounts" id="likeCounts" lay-verify="number" disabled autocomplete="off" placeholder="" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">发布时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="createDate" id="createDate" lay-verify="date" disabled autocomplete="off" placeholder="" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="text" name="status" id="status" lay-verify="title" disabled autocomplete="off" placeholder="" class="layui-input">
+        </div>
+    </div>
+
+</form>
+
+<script type="text/javascript" src="layui/layui.js"></script>
+</body>
+</html>
