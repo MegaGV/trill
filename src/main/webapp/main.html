@@ -8,6 +8,43 @@
 </head>
 <body>
 
+<div class="layui-form">
+    搜索ID:
+    <div class="layui-inline">
+        <input class="layui-input" name="id" id="vid" autocomplete="off">
+    </div>
+    描述:
+    <div class="layui-inline">
+        <input class="layui-input" name="videodesc" id="videodesc" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload" id="search">搜索</button>
+</div>
+<div class="layui-form">
+    时间范围:
+    <div class="layui-inline">
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="test10" placeholder=" - ">
+        </div>
+    </div>
+    <button class="layui-btn" data-type="reload" id="search2">搜索</button>
+</div>
+<form class="layui-form">
+    级联选择框:
+    <div class="layui-inline">
+        <div class="layui-input-inline">
+            <select name="quiz1" id="quiz1" lay-filter="quiz1">
+                <option value="请选择">请选择</option>
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="quiz2" id="quiz2" lay-filter="quiz2">
+            </select>
+        </div>
+        <button class="layui-btn" data-type="reload" id="search3">搜索</button>
+    </div>
+</form>
+
+
 <table class="layui-hide" id="video" lay-filter="test"></table>
 
 <script type="text/html" id="barDemo">
@@ -15,17 +52,44 @@
     <button class="layui-btn layui-btn-xs" lay-event="edit">编辑</button>
     <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button>
 </script>
+<script type="text/html" id="headBar">
+    <div class="layui-btn-group">
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">
+            <i class="layui-icon">&#xe654;</i>
+        </button>
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="delete">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+</script>
 
 <script type="text/javascript" src="layui/layui.js"></script>
 <script type="text/javascript">
-    layui.use(['table', 'form', 'layer'], function(){
+    layui.use(['table', 'form', 'layer', 'laydate'], function(){
         var table = layui.table, //表格
             form = layui.form,
             $ = layui.jquery,
-            layer = layui.layer
+            layer = layui.layer,
+            laydate = layui.laydate
+
+        //初始化选项
+        $.ajax({
+            url: "http://localhost:8080/trill/videos/getChoicePre",
+            type: "POST",
+            dataType: 'JSON',
+            success: function(res) {
+                if(res == null)
+                    return;
+                $("#quiz1").html("<option value=''>请选择</option>");
+                $.each(res, function(index,val) {
+                    $('#quiz1').append("<option value='"+val+"'>"+val+"</option>");
+                })
+                form.render('select');//重新渲染下拉框
+            }
+        })
 
         //执行一个 table 实例
-        table.render({
+        var tableIns = table.render({
             elem: '#video'
             ,height: 420
             ,url: 'http://localhost:8080/trill/videos/getResult' //数据接口
@@ -39,7 +103,7 @@
             }
             ,title: '用户表'
             ,page: true //开启分页
-            ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,toolbar: '#headBar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             ,cols: [
                 [ //表头
                 {type: 'checkbox', fixed: 'left'}
@@ -66,6 +130,7 @@
             ]
         });
 
+        //监听状态开关
         form.on('switch(statusDemo)', function(obj){
             var ch = obj.elem.checked;
             var newStatus = (ch == true) ? 1 : 0;
@@ -89,7 +154,6 @@
             var value = obj.value //得到修改后的值
                 ,data = obj.data //得到所在行所有键值
                 ,field = obj.field; //得到字段
-
 
             $.ajax({
                 type: 'post',
@@ -125,19 +189,20 @@
                             content: 'http://localhost:8080/trill/videoInfo.html',
                             success: function(layero, index){
                                 var body = layer.getChildFrame('body', index);
-                                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-                                body.find('id').val('Hi，我是从父页来的');
-                                body.find('videoDesc').val('Hi，我是从父页来的');
-                                body.find('videoPath').val('Hi，我是从父页来的');
-                                body.find('likeCounts').val('Hi，我是从父页来的');
-                                body.find('createDate').val('Hi，我是从父页来的');
-                                body.find('status').val('Hi，我是从父页来的');
+                                body.find('id').val(res.id);
+                                body.find('videoDesc').val(res.videoDesc);
+                                body.find('videoPath').val(res.videoPath);
+                                body.find('likeCounts').val(res.likeCounts);
+                                body.find('createDate').val(res.createDate);
+                                if (res.status === 1){
+                                    body.find('status').attr('checked', 'checked');
+                                }
                             }
                         });
                     }
                 })
             } else if(layEvent === 'del'){
-                layer.confirm('真的删除行么', function(index){
+                layer.confirm('真的要删除么', function(index){
                     obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                     layer.close(index);
                     //向服务端发送删除指令
@@ -154,17 +219,129 @@
                     })
                 });
             } else if(layEvent === 'edit'){
-                //do something
+                $.ajax({
+                    type: 'get',
+                    url: 'http://localhost:8080/trill/videos/getVideoById?id='+data.id,
+                    dataType: 'json',
+                    success: function (res){
+                        layer.open({
+                            type: 2,
+                            title: 'video edit',
+                            area: ['90%', '90%'],
+                            content: 'http://localhost:8080/trill/videoEdit.html',
+                            success: function(layero, index){
+                                var body = layer.getChildFrame('body', index);
+                                body.find('id').val(res.id);
+                                body.find('videoDesc').val(res.videoDesc);
+                                body.find('videoPath').val(res.videoPath);
+                                body.find('likeCounts').val(res.likeCounts);
+                                body.find('createDate').val(res.createDate);
+                                if (res.status === 1) {
+                                    body.find('status').attr('checked', 'checked');
+                                }
+                            }
+                        });
+                    }
+                })
 
                 //同步更新缓存对应的值
-                obj.update({
-                    username: '123'
-                    ,title: 'xxx'
-                });
-            } else if(layEvent === 'LAYTABLE_TIPS'){
-                layer.alert('Hi，头部工具栏扩展的右侧图标。');
             }
         });
+
+        //头工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id),
+                data = checkStatus.data;
+            switch(obj.event){
+                case 'add':
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'delete':
+                    if (data.length === 0){
+                        lay.msg("请选择数据");
+                    }
+                    else{
+                        layer.confirm('真的要删除么', function(index) {
+                            var ids = [];
+                            for (var i in data) {
+                                ids[i] = data[i].id;
+                            }
+                            $.ajax({
+                                type: 'post',
+                                url: 'http://localhost:8080/trill/videos/delete',
+                                data: {
+                                    ids: ids
+                                },
+                                traditional: true, // 数据为数组
+                                dataType: 'json',
+                                success: function (res) {
+                                    layer.msg(res.message, function () {
+                                        tableIns.reload();
+                                    })
+                                }
+                            })
+                        });
+                    }
+                    break;
+            }
+        });
+
+        //监听搜索提交
+        $('#search').on('click', function (){
+            tableIns.reload({
+                where: { //设定异步数据接口的额外参数，任意设
+                    'id': $("#vid").val(),
+                    'desc': $('#videodesc').val()
+                },
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                url: "http://localhost:8080/trill/videos/getByIdDesc"
+            });
+        })
+
+        //时间搜索实例
+        laydate.render({
+            elem: '#test10',
+            type: 'datetime',
+            range: '~'
+            //date_format(create_time, "%Y-%M-%d") between 'date_format(#{start}, "%Y-%M-%d")' and 'date_format(#{end}, "%Y-%M-%d")'
+        });
+
+        //监听时间搜索提交
+        $('#search2').on('click', function (){
+            tableIns.reload({
+                where: { //设定异步数据接口的额外参数，任意设
+                    'date': $("#test10").val()
+                },
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                url: "http://localhost:8080/trill/videos/getByDate"
+            });
+        })
+
+        //级联查询
+        form.on('select(quiz1)', function(data){
+            $.ajax({
+                url: "http://localhost:8080/trill/videos/getChoice",
+                type: "POST",
+                dataType: 'JSON',
+                data: {
+                    value: data.value
+                },
+                success: function(res) {
+                    if(res == null)
+                        return;
+                    $("#quiz2").html("<option value=''>请选择</option>");
+                    $.each(res, function(index,val) {
+                        $('#quiz2').append("<option value='"+val+"'>"+val+"</option>");
+                    })
+                    form.render('select');//重新渲染下拉框
+                }
+            });
+        });
+
 
     });
 </script>

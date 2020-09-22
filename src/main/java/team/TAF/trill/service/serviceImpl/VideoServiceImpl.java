@@ -8,6 +8,7 @@ import team.TAF.trill.dao.VideoMapper;
 import team.TAF.trill.dto.Result;
 import team.TAF.trill.pojo.Video;
 import team.TAF.trill.service.VideoService;
+
 import java.util.regex.Pattern;
 
 import java.util.List;
@@ -33,8 +34,11 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public List<Video> getByIdDesc(String id, String desc) {
-        return videoMapper.getByIdDesc(id, desc);
+    public Result getByIdDesc(String id, String desc) {
+        Result result = new Result();
+        result.setData(videoMapper.getByIdDesc(id, desc));
+        result.setTotal(videoMapper.countByIdDesc(id, desc));
+        return result;
     }
 
     @Override
@@ -73,10 +77,9 @@ public class VideoServiceImpl implements VideoService {
             limit = 3;
         }
         page = (page == null) ? 0 : (page - 1) * limit;
-        List<Video> data = videoMapper.getResult(page, limit);
         Integer count = count();
         Result result = new Result();
-        result.setData(data);
+        result.setData(videoMapper.getResult(page, limit));
         result.setTotal(count);
         return result;
     }
@@ -123,5 +126,75 @@ public class VideoServiceImpl implements VideoService {
         return videoMapper.selectByPrimaryKey(id);
     }
 
+    @Override
+    @Transactional
+    public Result delete(String[] ids) {
+        Result result = new Result();
+        try {
+            for (String id : ids) {
+                videoMapper.deleteByPrimaryKey(id);
+            }
+            result.setStatus(100);
+            result.setMessage("删除成功");
+        } catch (Exception e){
+            e.printStackTrace();
+            result.setStatus(501);
+            result.setMessage("系统繁忙，请稍后再试");
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public Result updateAll(String id, String videoDesc, String videoPath, String likeCounts, String status) {
+        Result result = new Result();
+        Video video = videoMapper.selectByPrimaryKey(id);
+        if (video == null){
+            result.setStatus(500);
+            result.setMessage("请刷新界面后再试");
+        }
+        else {
+            try {
+                video.setVideoDesc(videoDesc);
+                video.setVideoPath(videoPath);
+                video.setLikeCounts((long) Integer.parseInt(likeCounts));
+                video.setStatus((status.equals("0")? 0 : 1));
+                videoMapper.updateByPrimaryKey(video);
+                result.setStatus(100);
+                result.setMessage("更新成功");
+            } catch (Exception e){
+                e.printStackTrace();
+                result.setStatus(501);
+                result.setMessage("系统繁忙，请稍后再试");
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Result getByDate(String date) {
+        Result result = new Result();
+        if (date.isEmpty()){
+            result.setData(videoMapper.getByDate(null, null));
+            result.setTotal(count());
+        }
+        else {
+            String[] dates = date.split("~");
+            result.setData(videoMapper.getByDate(dates[0], dates[1]));
+            result.setTotal(videoMapper.countByDate(dates[0], dates[1]));
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<String> getChoice(String value) {
+        return videoMapper.getChoice(value);
+    }
+
+    @Override
+    public List<String> getChoicePre() {
+        return videoMapper.getChoicePre();
+    }
 
 }

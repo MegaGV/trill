@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import team.TAF.trill.dto.Result;
 import team.TAF.trill.pojo.Video;
 import team.TAF.trill.service.VideoService;
-
 import java.util.List;
 
 @Controller
@@ -36,9 +35,8 @@ public class VideoController {
 
     @RequestMapping("/getByIdDesc")
     @ResponseBody
-    public List<Video> getByIdDesc(String id, String desc){
+    public Result getByIdDesc(String id, String desc){
         //SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern:"");
-
         return videoService.getByIdDesc(id, desc);
     }
 
@@ -71,4 +69,32 @@ public class VideoController {
         return videoService.getVideoById(id);
     }
 
+    @RequestMapping("delete")
+    @ResponseBody
+    public Result delete(String[] ids){
+        return videoService.delete(ids);
+    }
+
+    @RequestMapping("updateAll")
+    @ResponseBody
+    public Result updateAll(String id, String videoDesc, String videoPath, String likeCounts, String status){
+        return videoService.updateAll(id, videoDesc, videoPath, likeCounts, status);
+    }
+
+    @RequestMapping("getByDate")
+    @ResponseBody
+    public Result getByDate(String date){
+        return videoService.getByDate(date);
+    }
+
+    @RequestMapping("getChoice")
+    @ResponseBody
+    public List<String> getChoice(String value){
+        return videoService.getChoice(value);
+    }
+    @RequestMapping("getChoicePre")
+    @ResponseBody
+    public List<String> getChoicePre(){
+        return videoService.getChoicePre();
+    }
 }

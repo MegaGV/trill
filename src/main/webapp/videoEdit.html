@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -17,19 +17,19 @@
     <div class="layui-form-item">
         <label class="layui-form-label">视频描述</label>
         <div class="layui-input-block">
-            <input type="text" name="videoDesc" id="videoDesc" lay-verify="title" disabled autocomplete="off" placeholder="" class="layui-input">
+            <input type="text" name="videoDesc" id="videoDesc" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">视频地址</label>
         <div class="layui-input-block">
-            <input type="text" name="videoPath" id="videoPath" lay-verify="title" disabled autocomplete="off" placeholder="" class="layui-input">
+            <input type="text" name="videoPath" id="videoPath" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">点赞数</label>
         <div class="layui-input-block">
-            <input type="text" name="likeCounts" id="likeCounts" lay-verify="number" disabled autocomplete="off" placeholder="" class="layui-input">
+            <input type="text" name="likeCounts" id="likeCounts" lay-verify="number" autocomplete="off" placeholder="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -41,7 +41,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label">状态</label>
         <div class="layui-input-block">
-            <input type="checkbox" name="status" id="status" disabled lay-skin="switch" lay-text="发布|下线">
+            <input type="checkbox" name="status" id="status" lay-skin="switch" lay-text="发布|下线">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
 
@@ -51,6 +57,28 @@
 <script type="text/javascript">
     layui.use(['form'], function(){
         var form = layui.form;
+        //监听提交
+        form.on('submit(demo1)', function(data){
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            })
+            $.ajax({
+                type: 'post',
+                url: 'http://localhost:8080/trill/videos/updateAll',
+                data:{
+                    "id": data.id,
+                    'videoDesc': data.videoDesc,
+                    'videoPath': data.videoPath,
+                    'likeCounts': data.likeCounts,
+                    'status': data.status
+                },
+                dataType: 'json',
+                success: function (res){
+                    layer.msg(res.message)
+                }
+            })
+            return false;
+        });
     });
 </script>
 </body>

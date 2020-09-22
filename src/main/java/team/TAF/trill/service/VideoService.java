@@ -11,7 +11,7 @@ public interface VideoService {
 
     List<Video> getByDesc(String desc);
 
-    List<Video> getByIdDesc(String id, String desc);
+    Result getByIdDesc(String id, String desc);
 
     Result deleteById(String id);
 
@@ -22,4 +22,14 @@ public interface VideoService {
     Result update(String vid, String field, String value);
 
     Video getVideoById(String id);
+
+    Result delete(String[] ids);
+
+    Result updateAll(String id, String videoDesc, String videoPath, String likeCounts, String status);
+
+    Result getByDate(String date);
+
+    List<String> getChoice(String value);
+
+    List<String> getChoicePre();
 }
