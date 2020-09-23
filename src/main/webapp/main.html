@@ -45,7 +45,7 @@
 </form>
 
 
-<table class="layui-hide" id="video" lay-filter="test"></table>
+<table class="layui-hide" id="videos" lay-filter="test"></table>
 
 <script type="text/html" id="barDemo">
     <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</button>
@@ -82,7 +82,7 @@
                     return;
                 $("#quiz1").html("<option value=''>请选择</option>");
                 $.each(res, function(index,val) {
-                    $('#quiz1').append("<option value='"+val+"'>"+val+"</option>");
+                    $('#quiz1').append("<option value='" + val + "'>" + val + "</option>");
                 })
                 form.render('select');//重新渲染下拉框
             }
@@ -90,7 +90,7 @@
 
         //执行一个 table 实例
         var tableIns = table.render({
-            elem: '#video'
+            elem: '#videos'
             ,height: 420
             ,url: 'http://localhost:8080/trill/videos/getResult' //数据接口
             ,parseData: function(res){ //res 即为原始返回的数据
@@ -185,17 +185,16 @@
                         layer.open({
                             type: 2,
                             title: 'video information',
-                            area: ['90%', '90%'],
-                            content: 'http://localhost:8080/trill/videoInfo.html',
+                            area: ['80%', '80%'],
+                            content: 'http://localhost:8080/trill/videos/viewPath',
                             success: function(layero, index){
                                 var body = layer.getChildFrame('body', index);
-                                body.find('id').val(res.id);
-                                body.find('videoDesc').val(res.videoDesc);
-                                body.find('videoPath').val(res.videoPath);
-                                body.find('likeCounts').val(res.likeCounts);
-                                body.find('createDate').val(res.createDate);
+                                body.find('#id').val(res.id);
+                                body.find('#videoDesc').val(res.videoDesc);
+                                body.find('#videoPath').val(res.videoPath);
+                                body.find('#likeCounts').val(res.likeCounts);
                                 if (res.status === 1){
-                                    body.find('status').attr('checked', 'checked');
+                                    body.find('#status').attr('checked', 'checked');
                                 }
                             }
                         });
@@ -227,17 +226,16 @@
                         layer.open({
                             type: 2,
                             title: 'video edit',
-                            area: ['90%', '90%'],
-                            content: 'http://localhost:8080/trill/videoEdit.html',
+                            area: ['80%', '80%'],
+                            content: 'http://localhost:8080/trill/videos/editPath',
                             success: function(layero, index){
                                 var body = layer.getChildFrame('body', index);
-                                body.find('id').val(res.id);
-                                body.find('videoDesc').val(res.videoDesc);
-                                body.find('videoPath').val(res.videoPath);
-                                body.find('likeCounts').val(res.likeCounts);
-                                body.find('createDate').val(res.createDate);
+                                body.find('#id').val(res.id);
+                                body.find('#videoDesc').val(res.videoDesc);
+                                body.find('#videoPath').val(res.videoPath);
+                                body.find('#likeCounts').val(res.likeCounts);
                                 if (res.status === 1) {
-                                    body.find('status').attr('checked', 'checked');
+                                    body.find('#status').attr('checked', 'checked');
                                 }
                             }
                         });
@@ -254,7 +252,12 @@
                 data = checkStatus.data;
             switch(obj.event){
                 case 'add':
-                    layer.alert(JSON.stringify(data));
+                    layer.open({
+                        type: 2,
+                        title: 'video submit',
+                        area: ['80%', '80%'],
+                        content:'http://localhost:8080/trill/videos/addPath'
+                    });
                     break;
                 case 'delete':
                     if (data.length === 0){
@@ -333,9 +336,10 @@
                 success: function(res) {
                     if(res == null)
                         return;
+                    //$("#quiz2).empty()
                     $("#quiz2").html("<option value=''>请选择</option>");
                     $.each(res, function(index,val) {
-                        $('#quiz2').append("<option value='"+val+"'>"+val+"</option>");
+                        $('#quiz2').append("<option value='" + val + "'>" + val + "</option>");
                     })
                     form.render('select');//重新渲染下拉框
                 }

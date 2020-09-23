@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
 </head>
 <body>
 
-<form class="layui-form" action="">
+<form class="layui-form">
     <div class="layui-form-item">
         <label class="layui-form-label">id</label>
         <div class="layui-input-block">
@@ -17,25 +17,19 @@
     <div class="layui-form-item">
         <label class="layui-form-label">视频描述</label>
         <div class="layui-input-block">
-            <input type="text" name="videoDesc" id="videoDesc" lay-verify="title" disabled autocomplete="off" placeholder="" class="layui-input">
+            <input type="text" name="videoDesc" id="videoDesc" disabled lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">视频地址</label>
         <div class="layui-input-block">
-            <input type="text" name="videoPath" id="videoPath" lay-verify="title" disabled autocomplete="off" placeholder="" class="layui-input">
+            <input type="text" name="videoPath" id="videoPath" disabled lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">点赞数</label>
         <div class="layui-input-block">
-            <input type="text" name="likeCounts" id="likeCounts" lay-verify="number" disabled autocomplete="off" placeholder="" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">发布时间</label>
-        <div class="layui-input-block">
-            <input type="text" name="createDate" id="createDate" lay-verify="date" disabled autocomplete="off" placeholder="" class="layui-input">
+            <input type="text" name="likeCounts" id="likeCounts" disabled lay-verify="number" autocomplete="off" placeholder="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -47,7 +41,7 @@
 
 </form>
 
-<script type="text/javascript" src="layui/layui.js"></script>
+<script type="text/javascript" src="../layui/layui.js"></script>
 <script type="text/javascript">
     layui.use(['form'], function(){
         var form = layui.form;

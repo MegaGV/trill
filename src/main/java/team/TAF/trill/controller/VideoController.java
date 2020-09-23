@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import team.TAF.trill.dto.Result;
 import team.TAF.trill.pojo.Video;
 import team.TAF.trill.service.VideoService;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -92,9 +95,39 @@ public class VideoController {
     public List<String> getChoice(String value){
         return videoService.getChoice(value);
     }
+
     @RequestMapping("getChoicePre")
     @ResponseBody
     public List<String> getChoicePre(){
         return videoService.getChoicePre();
     }
+
+    @RequestMapping("viewPath")
+    public String viewPath(){
+        return "videoInfo";
+    }
+
+    @RequestMapping("editPath")
+    public String editPath(){
+        return "videoEdit";
+    }
+
+    @RequestMapping("addPath")
+    public String addPath(){
+        return "videoSubmit";
+    }
+
+    @RequestMapping("upload")
+    @ResponseBody
+    public Result upload(MultipartFile file, HttpServletRequest request){
+        return videoService.upload(file, request);
+    }
+
+    @RequestMapping("videoSubmit")
+    @ResponseBody
+    public Result videoSubmit(String videoDesc, String videoPath, HttpServletRequest request){
+        return videoService.videoSubmit(videoDesc, videoPath, request);
+    }
+
+
 }

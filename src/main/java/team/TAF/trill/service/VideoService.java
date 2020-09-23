@@ -1,8 +1,10 @@
 package team.TAF.trill.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import team.TAF.trill.dto.Result;
 import team.TAF.trill.pojo.Video;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface VideoService {
@@ -32,4 +34,8 @@ public interface VideoService {
     List<String> getChoice(String value);
 
     List<String> getChoicePre();
+
+    Result upload(MultipartFile file, HttpServletRequest request);
+
+    Result videoSubmit(String videoDesc, String videoPath, HttpServletRequest request);
 }

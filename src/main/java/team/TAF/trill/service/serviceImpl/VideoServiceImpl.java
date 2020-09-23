@@ -1,14 +1,21 @@
 package team.TAF.trill.service.serviceImpl;
 
+import it.sauronsoftware.jave.MultimediaInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.multipart.MultipartFile;
 import team.TAF.trill.dao.VideoMapper;
 import team.TAF.trill.dto.Result;
 import team.TAF.trill.pojo.Video;
 import team.TAF.trill.service.VideoService;
+import team.TAF.trill.util.UpUtils;
+import team.TAF.trill.util.VideoUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import java.util.List;
@@ -195,6 +202,51 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public List<String> getChoicePre() {
         return videoMapper.getChoicePre();
+    }
+
+    @Override
+    public Result upload(MultipartFile file, HttpServletRequest request) {
+        Result result = new Result();
+        String msg = UpUtils.upfile(file, request);
+        if (msg.equals("200")){
+            result.setMessage(file.getOriginalFilename());
+        }
+        else{
+            result.setStatus(501);
+            result.setMessage("上传异常");
+        }
+        return result;
+    }
+
+    @Override
+    public Result videoSubmit(String videoDesc, String videoPath, HttpServletRequest request) {
+        Result result = new Result();
+
+        Video video = new Video();
+        String id = null;
+        do{
+            id = UUID.randomUUID().toString();
+        } while (videoMapper.selectByPrimaryKey(id) != null);
+        video.setId(id);
+        video.setVideoPath(videoPath);
+        video.setVideoDesc(videoDesc);
+        video.setStatus(1);
+        video.setCreateTime(new Date());
+
+        MultimediaInfo analysis= VideoUtils.analysis(videoPath, request);
+        video.setVideoSeconds(Float.valueOf(analysis.getDuration() / 1000));
+        video.setVideoHeight(analysis.getVideo().getSize().getHeight());
+        video.setVideoWidth(analysis.getVideo().getSize().getWidth());
+
+        try {
+            videoMapper.insert(video);
+        } catch (Exception e){
+            e.printStackTrace();
+            result.setStatus(500);
+            result.setMessage("未知错误");
+        }
+
+        return result;
     }
 
 }
