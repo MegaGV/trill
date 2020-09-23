@@ -11,7 +11,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">视频描述</label>
         <div class="layui-input-block">
-            <input type="text" name="videoDesc" id="videoDesc" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" style="max-width: 256px">
+            <input type="text" name="videoDesc" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" style="max-width: 256px">
         </div>
     </div>
     <div class="layui-form-item">
@@ -45,7 +45,7 @@
             elem: '#test10',
             url: 'http://localhost:8080/trill/videos/upload', //改成您自己的上传接口
             //field: file,
-            accept: video,
+            accept: 'video',
             done: function(res){
                 layer.msg('上传成功');
                 layui.$('#uploadDemoView').removeClass('layui-hide').find('input').val(res.message);
@@ -60,14 +60,12 @@
             $.ajax({
                 type: 'post',
                 url: 'http://localhost:8080/trill/videos/videoSubmit',
-                data: {
-                    res: d.data
-                },
+                data: d.field,
                 dataType: 'json',
                 success: function (res) {
-                    lay.msg(res.message);
+                    layer.msg(res.message);
                     if (res.status === 0){
-
+                        layer.msg("错误");
                     }
                 }
             })

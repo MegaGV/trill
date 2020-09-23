@@ -11,7 +11,7 @@ import java.io.File;
 public class VideoUtils {
 
     public static MultimediaInfo analysis(String videoName,HttpServletRequest request){
-        String realPath = request.getSession().getServletContext().getRealPath("/WEB-INF/video/");
+        String realPath = request.getSession().getServletContext().getRealPath("/video/");
        //获取视频的文件对象
         File file = new File(realPath+videoName);
         //获取解析视频的对象  （jave）

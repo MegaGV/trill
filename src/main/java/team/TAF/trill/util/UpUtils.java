@@ -13,7 +13,7 @@ public class UpUtils {
         //判断文件后缀
         //file.getOriginalFilename().endsWith("");
 
-        String realPath = request.getSession().getServletContext().getRealPath("/WEB-INF/video/");
+        String realPath = request.getSession().getServletContext().getRealPath("/video/");
         System.out.println(realPath);
         //String basePath="/Users/xiyang/IdeaProjects/trill/src/main/webapp/WEB-INF/video/";
 

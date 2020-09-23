@@ -163,7 +163,7 @@ public class VideoServiceImpl implements VideoService {
         else {
             try {
                 video.setVideoDesc(videoDesc);
-                video.setVideoPath(videoPath);
+                video.setVideoPath("video/" + videoPath);
                 video.setLikeCounts((long) Integer.parseInt(likeCounts));
                 video.setStatus((status.equals("0")? 0 : 1));
                 videoMapper.updateByPrimaryKey(video);
@@ -223,23 +223,28 @@ public class VideoServiceImpl implements VideoService {
         Result result = new Result();
 
         Video video = new Video();
-        String id = null;
-        do{
+        String id = UUID.randomUUID().toString();
+        while (videoMapper.selectByPrimaryKey(id) != null){
             id = UUID.randomUUID().toString();
-        } while (videoMapper.selectByPrimaryKey(id) != null);
+        }
         video.setId(id);
+        video.setUserId("1001");
         video.setVideoPath(videoPath);
         video.setVideoDesc(videoDesc);
         video.setStatus(1);
         video.setCreateTime(new Date());
 
         MultimediaInfo analysis= VideoUtils.analysis(videoPath, request);
-        video.setVideoSeconds(Float.valueOf(analysis.getDuration() / 1000));
-        video.setVideoHeight(analysis.getVideo().getSize().getHeight());
-        video.setVideoWidth(analysis.getVideo().getSize().getWidth());
+        if (analysis != null){
+            video.setVideoSeconds((float) (analysis.getDuration() / 1000));
+            video.setVideoHeight(analysis.getVideo().getSize().getHeight());
+            video.setVideoWidth(analysis.getVideo().getSize().getWidth());
+        }
 
         try {
             videoMapper.insert(video);
+            result.setStatus(100);
+            result.setMessage("视频发布成功");
         } catch (Exception e){
             e.printStackTrace();
             result.setStatus(500);
