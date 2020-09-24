@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import team.TAF.trill.dao.VideoMapper;
 import team.TAF.trill.dto.Result;
+import team.TAF.trill.dto.VideoLike;
 import team.TAF.trill.pojo.Video;
 import team.TAF.trill.service.VideoService;
 import team.TAF.trill.util.UpUtils;
@@ -231,6 +234,7 @@ public class VideoServiceImpl implements VideoService {
         video.setUserId("1001");
         video.setVideoPath(videoPath);
         video.setVideoDesc(videoDesc);
+        video.setLikeCounts((long) 0);
         video.setStatus(1);
         video.setCreateTime(new Date());
 
@@ -253,5 +257,11 @@ public class VideoServiceImpl implements VideoService {
 
         return result;
     }
+
+    @Override
+    public List<VideoLike> getVideoLike() {
+        return videoMapper.getVideoLike();
+    }
+
 
 }

@@ -58,20 +58,27 @@
 
 
     <!--所有静态资源需要重新映射 -->
-    <mvc:resources location="/WEB-INF/js/" mapping="/js/**">
+    <mvc:resources location="/js/" mapping="/js/**">
     </mvc:resources>
-    <mvc:resources location="/WEB-INF/css/" mapping="/css/**">
+    <mvc:resources location="/css/" mapping="/css/**">
     </mvc:resources>
-    <mvc:resources location="/WEB-INF/img/" mapping="/img/**">
-    </mvc:resources>
-    <mvc:resources location="/WEB-INF/templates/" mapping="/templates/**">
+    <mvc:resources location="/img/" mapping="/img/**">
     </mvc:resources>
     <mvc:resources location="/layui/" mapping="/layui/**">
     </mvc:resources>
     <mvc:resources location="/video/" mapping="/video/**">
     </mvc:resources>
-    <mvc:resources location="/WEB-INF/bgm/" mapping="/bgm/**">
-    </mvc:resources>
+    <mvc:resources location="/" mapping="/login.html"/>
+
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/videos/*"/>
+            <mvc:mapping path="/home/main"/>
+            <mvc:mapping path="/home/main1"/>
+            <bean class="team.TAF.trill.filter.InterFilter"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
     <!-- 文件上传-->
     <bean name="multipartResolver"

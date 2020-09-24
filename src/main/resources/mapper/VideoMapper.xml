@@ -157,4 +157,8 @@
     select nickname
     from users
   </select>
+  <select id="getVideoLike" resultType="team.TAF.trill.dto.VideoLike">
+    select video_path as videoName, like_counts as videoLike
+    from videos
+  </select>
 </mapper>

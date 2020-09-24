@@ -45,8 +45,13 @@
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, username, password, face_image, nickname, fans_counts, follow_counts, 
+    select id, username, password, face_image, nickname, fans_counts, follow_counts,
     receive_like_counts, rId
     from users
+  </select>
+  <select id="getUserByUsername" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select id, username, password, face_image, nickname
+    from users
+    where username = #{username}
   </select>
 </mapper>

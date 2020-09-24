@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import team.TAF.trill.dto.Result;
+import team.TAF.trill.dto.VideoLike;
 import team.TAF.trill.pojo.Video;
 import team.TAF.trill.service.VideoService;
 
@@ -127,6 +128,12 @@ public class VideoController {
     @ResponseBody
     public Result videoSubmit(String videoDesc, String videoPath, HttpServletRequest request){
         return videoService.videoSubmit(videoDesc, videoPath, request);
+    }
+
+    @RequestMapping("getVideoLike")
+    @ResponseBody
+    public List<VideoLike> getVideoLike(){
+        return videoService.getVideoLike();
     }
 
 

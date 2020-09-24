@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import team.TAF.trill.dto.VideoDto;
+import team.TAF.trill.dto.VideoLike;
 import team.TAF.trill.pojo.Video;
 
 public interface VideoMapper {
@@ -36,4 +37,6 @@ public interface VideoMapper {
     List<String> getChoice(@Param("value")String value);
 
     List<String> getChoicePre();
+
+    List<VideoLike> getVideoLike();
 }
